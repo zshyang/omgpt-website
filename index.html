@@ -1,0 +1,418 @@
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<!-- saved from url=(0047)https://www.cs.cmu.edu/~peiyunh/tiny/index.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="StyleSheet" href="./files/style.css" type="text/css" media="all">
+
+    <title>OmniMotionGPT</title>
+
+    <style type="text/css">
+      body {
+	    font-family : Times;
+	    background-color : #f2f2f2;
+	    font-size : 15px;
+      }
+
+      .content {
+	    width : 800px;
+	    padding : 25px 25px;
+	    margin : 25px auto;
+	    background-color : #fff;
+	    border-radius: 20px;
+      }
+      .description {
+        font-family: "Times";
+        white-space: pre;
+        text-align: left;
+      }
+
+      .content-title {
+	    background-color : inherit;
+            margin-top: 5px;
+            padding-top: 5px;
+	    margin-bottom : 0;
+	    padding-bottom : 0;
+      }
+
+      a, a:visited {
+	    text-decoration: none;
+	    color : blue;
+      }
+
+      .anchor {
+      color: inherit;
+      }
+      #authors {
+	    text-align : center;
+      }
+
+      #conference {
+	    text-align : center;
+	    font-style : italic;
+      }
+
+      #authors a {
+	    margin : 0 10px;
+      }
+
+      h1 {
+	    text-align : center;
+	    font-family : Times;
+	    font-size : 35px;
+      }
+
+      h2 {
+	    font-family : Times;
+	    font-size : 25px;
+	    padding : 0; margin : 10px;
+      }
+
+      h3 {
+	    font-family : Times;
+	    font-size : 20px;
+	    padding : 0; margin : 10px;
+      }
+
+      p {
+	    font-family : Times;
+	    line-height : 130%;
+	    margin : 10px;
+	    text-align: justify;
+      }
+
+      big {
+	    font-family : Times;
+	    font-size : 20px;
+      }
+
+      li {
+	    margin : 10px 0;
+      }
+
+      .samples {
+	    float : left;
+	    width : 50%;
+	    text-align : center;
+      }
+
+      .cond {
+	    float : left;
+	    margin : 0 40px;
+      }
+
+      .cond-container {
+	    width : 700px;
+	    margin : 0 auto;
+	    text-align : center;
+      }
+      #vidalign {
+         display: block;
+         margin: 0px;
+         padding: 0px;
+         position: relative;
+         top: 90px;
+         height: auto;
+         max-width: auto;
+         overflow-y: hidden;
+         overflow-x:auto;
+         word-wrap:normal;
+         white-space:nowrap;
+      }
+
+      .footnote-marker {
+        display: inline-block; /* Use block if you want the asterisk on a separate line */
+        text-align: center;
+        font-size: smaller;
+        width: 100%; /* Full width if you want it on a separate line */
+      }
+
+      .footnote-container {
+        text-align: center; /* Centers text within the container */
+        /* Other styling as needed */
+      }
+
+      .footnotes {
+        text-align: center;
+        font-size: smaller;
+        color: grey;
+      }
+
+    </style>
+  </head>
+
+
+
+  <body>
+
+    <div class="content content-title" style="text-align: center;">
+      <h1>OmniMotionGPT: Animal Motion Generation with Limited Data</h1>
+
+      <p id="authors">
+        <table align="center" style="width:100%; text-align:center; table-layout: fixed">
+          <tr>
+          <th><a href="https://zhangsihao-yang.github.io/">Zhangsihao Yang<sup>1*</sup></a></th>
+          <th><a href="https://sites.google.com/view/mingyuan-zhou/home">Mingyuan Zhou<sup>2</sup></a></th>
+          <th><a href="https://shanmy.github.io/">Mengyi Shan<sup>3</sup></a></th>
+          <th><a href="https://bbwen.github.io/">Bingbing Wen<sup>3</sup></a></th>
+          <th><a href="">Ziwei Xuan<sup>2</sup></a></th>
+          </tr>
+        </table>
+        <table align="center" style="width:100%; text-align:center; table-layout: fixed">
+          <tr>
+          <th><a href="https://scholar.google.com/citations?user=ycEHnWoAAAAJ&hl=en">Mitch Hill<sup>2</sup></a></th>
+          <th><a href="https://scholar.google.com/citations?user=tG-WDLwAAAAJ&hl=en">Junjie Bai<sup>2</sup></a></th>
+          <th><a href="http://maple-lab.net/gqi/">Guo-Jun Qi<sup>24</sup></a></th>
+          <th><a href="https://gsl.lab.asu.edu/yalin-wang/">Yalin Wang<sup>1</sup></a></th>
+          </tr>
+        </table>
+        <table align="center" style="width:100%; text-align:center; table-layout: fixed">
+          <th><sup>1</sup>Arizona State University, USA</th>
+          <th><sup>2</sup>OPPO Seattle Research Center, USA</th>
+          <th><sup>3</sup>University of Washington, USA</th>
+          <th><sup>4</sup>Westlake University, China</th>
+        </table>
+        
+      </p>
+      <!-- Footnotes Section -->
+      <div class="footnote-container">
+        <span class="footnote-marker"></span> * Work done while interning at OPPO.
+      </div>
+    </div>
+
+
+	
+    <div class="content">
+      <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div>
+        <h3>Noisy web images</h3>
+        <table>
+          <td><img src="./figures/elephant2.png" width=120px></td>
+          <td><img src="./figures/giraffe2.png" width=120px></td>
+	  <td><img src="./figures/kangaroo2.png" width=120px></td>
+          <td><img src="./figures/penguin2.png" width=120px></td>
+          <td><img src="./figures/tiger2.png" width=120px></td>
+          <td><img src="./figures/zebra2.png" width=120px></td>
+        </table>
+        <h3>3D outputs (per-instance)</h3>
+        <table>
+          <td><img src="./figures/elephant2.gif" width=120px></td>
+          <td><img src="./figures/giraffe2.gif" width=120px></td>
+	  <td><img src="./figures/kangaroo2.gif" width=120px></td>
+          <td><img src="./figures/penguin2.gif" width=120px></td>
+          <td><img src="./figures/tiger2.gif" width=120px></td>
+          <td><img src="./figures/zebra2.gif" width=120px></td>
+        </table>
+        <h3>Animation</h3>
+        <table>
+          <td><img src="./figures/animation_elephant2.gif" width=120px></td>
+          <td><img src="./figures/animation_giraffe2.gif" width=120px></td>
+	  <td><img src="./figures/animation_kangaroo2.gif" width=120px></td>
+          <td><img src="./figures/animation_penguin2.gif" width=120px></td>
+          <td><img src="./figures/animation_tiger2.gif" width=120px></td>
+          <td><img src="./figures/animation_zebra2.gif" width=120px></td>
+        </table>
+        <p>
+          Given 20-30 in-the-wild images of an articulated animal class, ARTIC3D leverages diffusion prior to estimate the camera viewpoints, pose articulations, part shapes, and surface texture per instance. We also optimize the animations obtained from part transformations via diffusion guidance.
+        </p>
+      <div style="margin: 12px; text-align: left; border-top: 1px solid lightgray; padding-top: 12px;">
+        <a href="">
+	        <strong>[Data]</strong>
+	      </a>
+        <a href="https://arxiv.org/abs/2306.04619">
+          <strong>[Code]</strong>
+        </a>
+        <a href="https://arxiv.org/abs/2306.04619">
+          <strong>[Paper]</strong>
+        </a>
+      	<a href="https://www.youtube.com/watch?v=r1uKgqWlfyY">
+	        <strong>[Supp]</strong>
+	      </a>
+      </div>
+    </div>
+
+
+
+    <div class="content">
+      <h2>Abstract</h2>
+      <p>
+        Our paper aims to generate diverse and realistic animal motion sequences from textual descriptions, without a large-scale animal text-motion dataset. While the task of text-driven human motion synthesis is already extensively studied and benchmarked, it remains challenging to transfer this success to other skeleton structures with limited data. In this work, we design a model architecture that imitates Generative Pretraining Transformer (GPT), utilizing prior knowledge learned from human data to the animal domain. We jointly train motion autoencoders for both animal and human motions and at the same time optimize through the similarity scores among human motion encoding, animal motion encoding, and text CLIP embedding. Presenting the first solution to this problem, we are able to generate animal motions with high diversity and fidelity, quantitatively and qualitatively outperforming the results of training human motion generation baselines on animal data. Additionally, we introduce AnimalML3D, the first text-animal motion dataset with 1240 animation sequences spanning 36 different animal identities. We hope this dataset would mediate the data scarcity problem in text-driven animal motion generation, providing a new playground for the research community.
+      </p>
+      <div>
+	      <img src="./figures/teaser.png" width="95%">
+      </div>
+    </div>
+
+	
+	
+    <div class="content">
+      <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div>
+      <h2>Video</h2>
+        <iframe width="800" height="500" src="https://www.youtube.com/embed/r1uKgqWlfyY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+	
+	
+	
+    <div class="content">
+      <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div>
+      <h2>Results on Pascal-Part and E-LASSIE images</h2>
+        <table>
+          <td><img src="./figures/horse.png" width=200px></td>
+          <td><img src="./figures/horse.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/horse.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/cow.png" width=200px></td>
+	  <td><img src="./figures/cow.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/cow.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/sheep.png" width=200px></td>
+          <td><img src="./figures/sheep.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/sheep.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/elephant1.png" width=200px></td>
+          <td><img src="./figures/elephant1.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/elephant1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/giraffe1.png" width=200px></td>
+          <td><img src="./figures/giraffe1.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/giraffe1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/kangaroo1.png" width=200px></td>
+          <td><img src="./figures/kangaroo1.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/kangaroo1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/penguin1.png" width=200px></td>
+          <td><img src="./figures/penguin1.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/penguin1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/tiger1.png" width=200px></td>
+          <td><img src="./figures/tiger1.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/tiger1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <table>
+          <td><img src="./figures/zebra1.png" width=200px></td>
+          <td><img src="./figures/zebra1.gif" width=200px></td>
+          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/zebra1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
+        </table>
+        <p>
+          In addition to Pascal-Part and LASSIE datasets, we introduce E-LASSIE image collections where animal bodies are occluded or truncated. Results show that ARTIC3D can reconstruct robust and high-quality 3D shapes of diverse animal classes.
+        </p>
+    </div>
+
+    <div id="modelGallery">
+      <model-viewer id="model" autoplay ar shadow-intensity="1" src="./meshes/horse1.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
+      
+      <button onclick="changeModel('horse.glb')">Horse 1</button>
+      <button onclick="changeModel('kangaroo1.glb')">Horse 2</button>
+      <button onclick="changeModel('penguin1.glb')">Horse 3</button>
+      <!-- Add more buttons for additional models -->
+    </div>
+
+    <table>
+      <tr>
+        <td>
+          <model-viewer autoplay ar shadow-intensity="1" src="./meshes/horse.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
+        </td>
+        <td>
+          <model-viewer autoplay ar shadow-intensity="1" src="./meshes/kangaroo1.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
+        </td>
+        <td>
+          <model-viewer autoplay ar shadow-intensity="1" src="./meshes/penguin1.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
+        </td>
+      </tr>
+      <!-- Add more rows or cells as needed for more meshes -->
+    </table>
+    
+    
+    <script>
+      function changeModel(modelFile) {
+        document.getElementById('model').setAttribute('src', `./meshes/${modelFile}`);
+      }
+    </script>
+
+
+
+    <model-viewer style="width: 500px;" id="meshViewer" autoplay ar shadow-intensity="1" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" camera-controls></model-viewer>
+
+    <script>
+      const meshes = ['./meshes/horse.glb', './meshes/kangaroo1.glb', './meshes/penguin1.glb']; // Add more mesh paths
+      let currentIndex = 0;
+
+      const meshViewer = document.getElementById('meshViewer');
+
+      function displayNextMesh() {
+          meshViewer.setAttribute('src', meshes[currentIndex]);
+          currentIndex = (currentIndex + 1) % meshes.length; // Loop back to the first mesh after the last one
+      }
+
+      // Change mesh every 5 seconds
+      setInterval(displayNextMesh, 100);
+
+      // Initial load
+      displayNextMesh();
+    </script>
+    
+	
+	
+	
+    <div class="content">
+      <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div>
+        <h3>Framework Overview</h3>
+        <div>
+          <img src="./figures/pipeline.png" width="95%">
+        </div>
+        <p>
+          Given sparse web images of an animal species, ARTIC3D estimates the camera viewpoint, articulated pose, 3D part shapes, and surface texture for each instance. We propose a novel DASS module to efficiently compute image-level gradients from stable diffusion, which are applied in 1) input preprocessing, 2) shape and texture optimization, and 3) animation.
+        </p>
+    </div>
+
+	
+	
+    <div class="content">
+      <h2>Bibtex</h2>
+        <p class="description">@inproceedings{yao2023artic3d,
+title={ARTIC3D: Learning Robust Articulated 3D Shapes from Noisy Web Image Collections},
+author={Yao, Chun-Han
+	and Raj, Amit
+        and Hung, Wei-Chih
+        and Li, Yuanzhen
+        and Rubinstein, Michael
+        and Yang, Ming-Hsuan
+        and Jampani, Varun},
+journal={arXiv preprint arXiv:2306.04619},
+year={2023}
+}
+        </p>
+    </div>
+	
+	
+
+    <!-- <div class="content">
+      <h2>Related work</h2>
+        <p>
+	  <a href="https://chhankyao.github.io/hi-lassie/">Hi-LASSIE: High-Fidelity Articulated Shape and Skeleton Discovery from Sparse Image Ensemble. CVPR 2023.</a><br>
+	  <a href="https://bite.is.tue.mpg.de/">BITE: Beyond Priors for Improved Three-D Dog Pose Estimation. CVPR 2023.</a><br>
+	  <a href="https://barc.is.tue.mpg.de/">BARC: Learning to Regress 3D Dog Shape from Images by Exploiting Breed Information. CVPR 2022.</a><br>
+          <a href="https://chhankyao.github.io/lassie/">LASSIE: Learning Articulated Shape from Sparse Image Ensemble via 3D Part Discovery. NeurIPS 2022.</a><br>
+          <a href="https://jasonyzhang.com/ners/">NeRS: Neural Reflectance Surfaces for Sparse-View 3D Reconstruction in the Wild. NeurIPS 2021.</a><br>
+          <a href="https://nileshkulkarni.github.io/acsm/">Articulation Aware Canonical Surface Mapping. CVPR 2020.</a><br>
+	  <a href="https://github.com/silviazuffi/smalst">Three-D Safari: Learning to Estimate Zebra Pose, Shape, and Texture from Images "In the Wild". ICCV 2019.</a><br>
+        </p>
+    </div> -->
+
+
+
+<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+  <tr><td>
+    <p align="right"><font size="2">
+      <a href="https://www.cs.cmu.edu/~peiyunh/">Webpage design borrowed from Peiyun Hu</a> </font>
+    </p>
+  </td></tr>
+</table>
+
+</body></html>
