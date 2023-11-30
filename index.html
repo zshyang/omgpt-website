@@ -137,6 +137,52 @@
         color: grey;
       }
 
+      .video-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 30px;
+        align-items: center; /* This centers the children vertically if they are of different heights */
+      }
+
+      .video-wrapper {
+          flex: 1;
+          margin-right: 2px;
+          margin-left: 2px;
+          max-width: calc(20% - 4px);
+          /* 33.33% for 3 videos per row, subtracting margins */
+          height: auto;
+          text-align: center;
+      }
+
+      .video {
+        max-width: 100%; /* Make sure the video fills the wrapper */
+        height: auto;
+        display: block; /* This can help with centering in some cases */
+        margin: 0 auto; /* This centers the video if it's not already */
+      }
+      .caption {
+        text-align: center; /* other styling as needed */
+      }
+
+      .container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center;     /* Center vertically */
+      }
+
+      figure {
+        text-align: center; /* Centers the caption text */
+        width: 200px; /* Matches the width of the model-viewer */
+        margin: auto; /* Centers the figure in the space allotted to it */
+      }
+
+      figcaption {
+        margin-top: 8px; /* Spacing between the model-viewer and the caption */
+        width: 100%; /* Ensures the caption is as wide as its parent figure */
+      }
+
+
     </style>
   </head>
 
@@ -180,56 +226,169 @@
     </div>
 
 
-	
+
+
     <div class="content">
-      <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div>
-        <h3>Noisy web images</h3>
-        <table>
-          <td><img src="./figures/elephant2.png" width=120px></td>
-          <td><img src="./figures/giraffe2.png" width=120px></td>
-	  <td><img src="./figures/kangaroo2.png" width=120px></td>
-          <td><img src="./figures/penguin2.png" width=120px></td>
-          <td><img src="./figures/tiger2.png" width=120px></td>
-          <td><img src="./figures/zebra2.png" width=120px></td>
-        </table>
-        <h3>3D outputs (per-instance)</h3>
-        <table>
-          <td><img src="./figures/elephant2.gif" width=120px></td>
-          <td><img src="./figures/giraffe2.gif" width=120px></td>
-	  <td><img src="./figures/kangaroo2.gif" width=120px></td>
-          <td><img src="./figures/penguin2.gif" width=120px></td>
-          <td><img src="./figures/tiger2.gif" width=120px></td>
-          <td><img src="./figures/zebra2.gif" width=120px></td>
-        </table>
-        <h3>Animation</h3>
-        <table>
-          <td><img src="./figures/animation_elephant2.gif" width=120px></td>
-          <td><img src="./figures/animation_giraffe2.gif" width=120px></td>
-	  <td><img src="./figures/animation_kangaroo2.gif" width=120px></td>
-          <td><img src="./figures/animation_penguin2.gif" width=120px></td>
-          <td><img src="./figures/animation_tiger2.gif" width=120px></td>
-          <td><img src="./figures/animation_zebra2.gif" width=120px></td>
-        </table>
-        <p>
-          Given 20-30 in-the-wild images of an articulated animal class, ARTIC3D leverages diffusion prior to estimate the camera viewpoints, pose articulations, part shapes, and surface texture per instance. We also optimize the animations obtained from part transformations via diffusion guidance.
-        </p>
+      <h2> Generated Motions from Text Descriptions</h2>
+      <div class="container">
+        <!-- First model viewer -->
+        <figure>
+          <model-viewer 
+            style="width: 200px; height: 200px;" 
+            id="meshViewer1" 
+            autoplay 
+            ar 
+            shadow-intensity="1" 
+            shadow-softness="1" 
+            ar-modes="webxr scene-viewer quick-look" 
+            environment-image="neutral" 
+            camera-controls 
+            camera-target="0 0 0">
+          </model-viewer>
+          <figcaption><em>"A dog jumps forward and swings its arms."</em></figcaption>
+        </figure>
+
+        <!-- Second model viewer -->
+        <figure>
+          <model-viewer 
+            style="width: 200px; height: 200px;" 
+            id="meshViewer2" 
+            autoplay 
+            ar 
+            shadow-intensity="1" 
+            shadow-softness="1" 
+            ar-modes="webxr scene-viewer quick-look" 
+            environment-image="neutral" 
+            camera-controls 
+            camera-target="0 0 0">
+          </model-viewer>
+          <figcaption><em>"A bear passes objects from the left to the right initially heavy but then lighter objects."</em></figcaption>
+        </figure>
+
+        <!-- Third model viewer -->
+        <figure>
+          <model-viewer 
+            style="width: 200px; height: 200px;" 
+            id="meshViewer3" 
+            autoplay 
+            ar 
+            shadow-intensity="1" 
+            shadow-softness="1" 
+            ar-modes="webxr scene-viewer quick-look" 
+            environment-image="neutral" 
+            camera-controls 
+            camera-target="0 0 0">
+          </model-viewer>
+          <figcaption><em>"A moose jogs on the spot."</em></figcaption>
+        </figure>
+
+        <!-- Fourth model viewer -->
+        <figure>
+          <model-viewer 
+            style="width: 200px; height: 200px;" 
+            id="meshViewer4" 
+            autoplay 
+            ar 
+            shadow-intensity="1" 
+            shadow-softness="1" 
+            ar-modes="webxr scene-viewer quick-look" 
+            environment-image="neutral" 
+            camera-controls 
+            camera-target="0 0 0">
+          </model-viewer>
+          <figcaption><em>"A dog puts its hands on the floor and does a handstand."</em></figcaption>
+        </figure>
+
+      </div>
+
+      <!-- Script for the first model viewer -->
+      <script>
+        const meshes1 = [];
+        for (let i = 0; i <= 67; i++) {
+          let paddedNumber = String(i).padStart(3, '0');
+          meshes1.push(`meshes/000074/${paddedNumber}.glb`);
+        }
+        let currentIndex1 = 0;
+        const meshViewer1 = document.getElementById('meshViewer1');
+        function displayNextMesh1() {
+          meshViewer1.setAttribute('src', meshes1[currentIndex1]);
+          currentIndex1 = (currentIndex1 + 1) % meshes1.length;
+        }
+        setInterval(displayNextMesh1, 100); // You may want to increase this interval
+        displayNextMesh1();
+      </script>
+    
+      <!-- Script for the second model viewer -->
+      <script>
+        const meshes2 = [];
+        for (let i = 30; i <= 195; i++) {
+          let paddedNumber = String(i).padStart(3, '0');
+          meshes2.push(`meshes/000042/${paddedNumber}.glb`);
+        }
+        let currentIndex2 = 0;
+        const meshViewer2 = document.getElementById('meshViewer2');
+        function displayNextMesh2() {
+          meshViewer2.setAttribute('src', meshes2[currentIndex2]);
+          currentIndex2 = (currentIndex2 + 1) % meshes2.length;
+        }
+        setInterval(displayNextMesh2, 100); // You may want to increase this interval
+        displayNextMesh2();
+      </script>
+
+      <!-- Script for the third model viewer -->
+      <script>
+        const meshes3 = [];
+        for (let i = 0; i <= 71; i++) {
+          let paddedNumber = String(i).padStart(3, '0');
+          meshes3.push(`meshes/000099/${paddedNumber}.glb`);
+        }
+        let currentIndex3 = 0;
+        const meshViewer3 = document.getElementById('meshViewer3');
+        function displayNextMesh3() {
+          meshViewer3.setAttribute('src', meshes3[currentIndex1]);
+          currentIndex3 = (currentIndex3 + 1) % meshes3.length;
+        }
+        setInterval(displayNextMesh3, 100); // You may want to increase this interval
+        displayNextMesh3();
+      </script>
+
+      <!-- Script for the fourth model viewer -->
+      <script>
+        const meshes4 = [];
+        for (let i = 0; i <= 57; i++) {
+          let paddedNumber = String(i).padStart(3, '0');
+          meshes4.push(`meshes/000024/${paddedNumber}.glb`);
+        }
+        let currentIndex4 = 0;
+        const meshViewer4 = document.getElementById('meshViewer4');
+        function displayNextMesh4() {
+          meshViewer4.setAttribute('src', meshes4[currentIndex1]);
+          currentIndex4 = (currentIndex4 + 1) % meshes4.length;
+        }
+        setInterval(displayNextMesh4, 100); // You may want to increase this interval
+        displayNextMesh4();
+      </script>
+
+      <!-- Meta Information -->
       <div style="margin: 12px; text-align: left; border-top: 1px solid lightgray; padding-top: 12px;">
         <a href="">
-	        <strong>[Data]</strong>
-	      </a>
+          <strong>[Data]</strong>
+        </a>
         <a href="https://arxiv.org/abs/2306.04619">
           <strong>[Code]</strong>
         </a>
         <a href="https://arxiv.org/abs/2306.04619">
           <strong>[Paper]</strong>
         </a>
-      	<a href="https://www.youtube.com/watch?v=r1uKgqWlfyY">
-	        <strong>[Supp]</strong>
-	      </a>
+        <a href="https://www.youtube.com/watch?v=r1uKgqWlfyY">
+          <strong>[Supp]</strong>
+        </a>
       </div>
+
     </div>
-
-
+      
+      
+      
 
     <div class="content">
       <h2>Abstract</h2>
@@ -237,125 +396,219 @@
         Our paper aims to generate diverse and realistic animal motion sequences from textual descriptions, without a large-scale animal text-motion dataset. While the task of text-driven human motion synthesis is already extensively studied and benchmarked, it remains challenging to transfer this success to other skeleton structures with limited data. In this work, we design a model architecture that imitates Generative Pretraining Transformer (GPT), utilizing prior knowledge learned from human data to the animal domain. We jointly train motion autoencoders for both animal and human motions and at the same time optimize through the similarity scores among human motion encoding, animal motion encoding, and text CLIP embedding. Presenting the first solution to this problem, we are able to generate animal motions with high diversity and fidelity, quantitatively and qualitatively outperforming the results of training human motion generation baselines on animal data. Additionally, we introduce AnimalML3D, the first text-animal motion dataset with 1240 animation sequences spanning 36 different animal identities. We hope this dataset would mediate the data scarcity problem in text-driven animal motion generation, providing a new playground for the research community.
       </p>
       <div>
-	      <img src="./figures/teaser.png" width="95%">
+	      <img src="./figures/website_teaser.png" width="95%">
       </div>
     </div>
 
-	
-	
-    <div class="content">
-      <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div>
-      <h2>Video</h2>
-        <iframe width="800" height="500" src="https://www.youtube.com/embed/r1uKgqWlfyY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
-	
-	
-	
-    <div class="content">
-      <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div>
-      <h2>Results on Pascal-Part and E-LASSIE images</h2>
-        <table>
-          <td><img src="./figures/horse.png" width=200px></td>
-          <td><img src="./figures/horse.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/horse.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/cow.png" width=200px></td>
-	  <td><img src="./figures/cow.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/cow.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/sheep.png" width=200px></td>
-          <td><img src="./figures/sheep.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/sheep.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/elephant1.png" width=200px></td>
-          <td><img src="./figures/elephant1.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/elephant1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/giraffe1.png" width=200px></td>
-          <td><img src="./figures/giraffe1.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/giraffe1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/kangaroo1.png" width=200px></td>
-          <td><img src="./figures/kangaroo1.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/kangaroo1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/penguin1.png" width=200px></td>
-          <td><img src="./figures/penguin1.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/penguin1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/tiger1.png" width=200px></td>
-          <td><img src="./figures/tiger1.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/tiger1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <table>
-          <td><img src="./figures/zebra1.png" width=200px></td>
-          <td><img src="./figures/zebra1.gif" width=200px></td>
-          <td><model-viewer autoplay ar shadow-intensity="1" src="./meshes/zebra1.glb" ar ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer></td>
-        </table>
-        <p>
-          In addition to Pascal-Part and LASSIE datasets, we introduce E-LASSIE image collections where animal bodies are occluded or truncated. Results show that ARTIC3D can reconstruct robust and high-quality 3D shapes of diverse animal classes.
-        </p>
-    </div>
 
-    <div id="modelGallery">
-      <model-viewer id="model" autoplay ar shadow-intensity="1" src="./meshes/horse1.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
-      
-      <button onclick="changeModel('horse.glb')">Horse 1</button>
-      <button onclick="changeModel('kangaroo1.glb')">Horse 2</button>
-      <button onclick="changeModel('penguin1.glb')">Horse 3</button>
-      <!-- Add more buttons for additional models -->
-    </div>
-
-    <table>
-      <tr>
-        <td>
-          <model-viewer autoplay ar shadow-intensity="1" src="./meshes/horse.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
-        </td>
-        <td>
-          <model-viewer autoplay ar shadow-intensity="1" src="./meshes/kangaroo1.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
-        </td>
-        <td>
-          <model-viewer autoplay ar shadow-intensity="1" src="./meshes/penguin1.glb" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" auto-rotate camera-controls></model-viewer>
-        </td>
-      </tr>
-      <!-- Add more rows or cells as needed for more meshes -->
-    </table>
     
-    
-    <script>
-      function changeModel(modelFile) {
-        document.getElementById('model').setAttribute('src', `./meshes/${modelFile}`);
-      }
-    </script>
+    <div class="content">
+      <h2>Visual Comparison</h2>
+      <!-- <div style="float: right; width:70px; margin-top: 0px; margin-bottom: 25px"></div> -->
+      <div style="width:70px; margin-top: 0px; margin-bottom: 25px"></div>
+      <div class="video-container" style="margin-top: 0px;">
+        <div class="video-wrapper">
+          <p class="caption">T2M-GPT</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000049_t2mgpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">MotionGPT</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000049_motiongpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">MDM</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000049_md.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">MotionDiffuse</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000049_mdm.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">OMGPT (Ours)</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000049_omgpt.webm" type="video/mp4">
+            </video>
+        </div>
+      </div>
+      <p style="text-align: center;"><em>"A bear uplift his right hand and moving it fast again and again."</em></p>
+
+      <div class="video-container" style="margin-top: 0px;">
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000054_t2mgpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000054_motiongpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000054_md.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000054_mdm.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000054_omgpt.webm" type="video/mp4">
+            </video>
+        </div>
+      </div>
+      <p style="text-align: center;"><em>"A bear is waving with his right hand."</em></p>
+
+      <div class="video-container" style="margin-top: 0px;">
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000074_t2mgpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000074_motiongpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000074_md.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000074_mdm.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000074_omgpt.webm" type="video/mp4">
+            </video>
+        </div>
+      </div>
+      <p style="text-align: center;"><em>"A dog jumps forward and swings its arms."</em></p>
 
 
+      <div class="video-container" style="margin-top: 0px;">
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000087_t2mgpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000087_motiongpt.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000087_md.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000087_mdm.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000087_omgpt.webm" type="video/mp4">
+            </video>
+        </div>
+      </div>
+      <p style="text-align: center;"><em>"A bear standing brings hands together in front of him to applaud."</em></p>
+    </div>
 
-    <model-viewer style="width: 500px;" id="meshViewer" autoplay ar shadow-intensity="1" ar-modes="webxr scene-viewer quick-look" environment-image="neutral" camera-controls></model-viewer>
+    <div class="content">
+      <h2>Ablation Study</h2>
+      <div style="width:70px; margin-top: 0px; margin-bottom: 25px"></div>
+      <div class="video-container" style="margin-top: 0px;">
+        <div class="video-wrapper">
+          <p class="caption">A</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/A.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">B</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/B.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">C</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/C.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">D</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/D.webm" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-wrapper">
+          <p class="caption">E</p>
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/E.webm" type="video/mp4">
+            </video>
+        </div>
+      </div>
+      <p style="text-align: center;"><em>"A puma throws an object with their right hand and catch an object with both hands."</em></p>
 
-    <script>
-      const meshes = ['./meshes/horse.glb', './meshes/kangaroo1.glb', './meshes/penguin1.glb']; // Add more mesh paths
-      let currentIndex = 0;
+      <h2>More Our Results</h2>
+      <div style="width:70px; margin-top: 0px; margin-bottom: 25px"></div>
+      <div class="video-container" style="margin-top: 0px;">
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000009.webm" type="video/mp4">
+            </video>
+          <p class="caption"><em>"A dog raises right hand, waves, ..."</em></p>
 
-      const meshViewer = document.getElementById('meshViewer');
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000197.webm" type="video/mp4">
+            </video>
+            <p class="caption"><em>"Moose stretches by wrapping one arm ..."</em></p>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000224.webm" type="video/mp4">
+            </video>
+            <p class="caption"><em>"Dog stomps his left feet."</em></p>
+        </div>
+        <div class="video-wrapper">
+            <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+              <source src="videos/000299.webm" type="video/mp4">
+            </video>
+            <p class="caption"><em>"A dog walks backwards."</em></p>
+        </div>
+        <div class="video-wrapper">
+          <video class="video" onclick="setAttribute('controls', 'true');" autoplay loop muted>
+            <source src="videos/000046.webm" type="video/mp4">
+          </video>
+          <p class="caption"><em>"A puma raises their left hand ..."</em></p>
+      </div>
+      </div>
 
-      function displayNextMesh() {
-          meshViewer.setAttribute('src', meshes[currentIndex]);
-          currentIndex = (currentIndex + 1) % meshes.length; // Loop back to the first mesh after the last one
-      }
 
-      // Change mesh every 5 seconds
-      setInterval(displayNextMesh, 100);
+    </div>
+	
+	
+	
 
-      // Initial load
-      displayNextMesh();
-    </script>
+
     
 	
 	
@@ -367,7 +620,12 @@
           <img src="./figures/pipeline.png" width="95%">
         </div>
         <p>
-          Given sparse web images of an animal species, ARTIC3D estimates the camera viewpoint, articulated pose, 3D part shapes, and surface texture for each instance. We propose a novel DASS module to efficiently compute image-level gradients from stable diffusion, which are applied in 1) input preprocessing, 2) shape and texture optimization, and 3) animation.
+          We train part (a) and part (b) at the same time. 
+          In (a), we train two motion autoencoders simultaneously, each within their domain. 
+          In (b), human motion is fed into the human motion encoder to produce a semantic-aware, subject-invariant latent code <em>Z</em>. 
+          The CLIP feature of the subject-translated sentence and <em>Z</em> are concatenated together and passed into the animal decoders.
+          During inference in (c), we generate animal motions based on human motion sequences sampled from generative models.
+          Details on the architecture, loss functions, and inference process are elaborated in paper.
         </p>
     </div>
 
@@ -375,18 +633,7 @@
 	
     <div class="content">
       <h2>Bibtex</h2>
-        <p class="description">@inproceedings{yao2023artic3d,
-title={ARTIC3D: Learning Robust Articulated 3D Shapes from Noisy Web Image Collections},
-author={Yao, Chun-Han
-	and Raj, Amit
-        and Hung, Wei-Chih
-        and Li, Yuanzhen
-        and Rubinstein, Michael
-        and Yang, Ming-Hsuan
-        and Jampani, Varun},
-journal={arXiv preprint arXiv:2306.04619},
-year={2023}
-}
+        <p class="description"> TODO
         </p>
     </div>
 	
@@ -409,10 +656,16 @@ year={2023}
 
 <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
   <tr><td>
-    <p align="right"><font size="2">
-      <a href="https://www.cs.cmu.edu/~peiyunh/">Webpage design borrowed from Peiyun Hu</a> </font>
+    <p align="right">
+      <font size="2">
+        Webpage design borrowed from
+        <a href="https://www.cs.cmu.edu/~peiyunh/"> Peiyun Hu</a>
+        and
+        <a href="http://jonbarron.info/">Jon Barron</a>
+      </font>
     </p>
-  </td></tr>
+  </td>
+  </tr>
 </table>
 
 </body></html>
